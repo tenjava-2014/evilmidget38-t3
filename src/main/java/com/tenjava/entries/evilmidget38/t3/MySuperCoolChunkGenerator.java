@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 public class MySuperCoolChunkGenerator extends ChunkGenerator {
+    private final Biome[] BIOMES = Biome.values();
     private final String world;
     private final String id;
     private boolean firstchunk = true;
@@ -43,6 +45,7 @@ public class MySuperCoolChunkGenerator extends ChunkGenerator {
             int xAndZ = 8 - (23 - y);
             chunkBuilder.set(xAndZ, y, xAndZ, 16 - xAndZ, y + 1, 16 - xAndZ, (byte) Material.GRASS.getId());
         }
+        chunkBuilder.setBiome(BIOMES[random.nextInt(BIOMES.length)]);
         return chunkBuilder.build();
     }
 

@@ -1,6 +1,7 @@
 package com.tenjava.entries.evilmidget38.t3;
 
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator;
 
 import java.util.Random;
@@ -44,6 +45,18 @@ public class ChunkBuilder {
                 }
             }
         }
+    }
+
+    public void setBiome(Biome biome) {
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                setBiome(x, z, biome);
+            }
+        }
+    }
+
+    public void setBiome(int x, int z, Biome biome) {
+        this.grid.setBiome(x, z, biome);
     }
 
     public byte[][] build() {
