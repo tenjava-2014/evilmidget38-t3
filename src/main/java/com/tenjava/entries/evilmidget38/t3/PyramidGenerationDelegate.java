@@ -29,9 +29,4 @@ public class PyramidGenerationDelegate implements GenerationDelegate {
             builder.set(xAndZ, y, xAndZ, 16 - xAndZ, y + 1, 16 - xAndZ, (byte) material.getId());
         }
     }
-
-    @Override
-    public ChunkCoord getDimensions() {
-        return new ChunkCoord(1,1);
-    }
 }
