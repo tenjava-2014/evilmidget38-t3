@@ -6,13 +6,36 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.generator.BlockPopulator;
 
 import java.util.Random;
+import java.util.TreeMap;
 
 public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
+    private static final TreeMap<Integer, Material> WEIGHTED_ORES;
+    private static int MAX_ORE_KEY;
+    static {
+        WEIGHTED_ORES = new TreeMap<Integer, Material>();
+        MAX_ORE_KEY = 0;
+        MAX_ORE_KEY += 15;
+        WEIGHTED_ORES.put(MAX_ORE_KEY, Material.COAL_ORE);
+        MAX_ORE_KEY += 10;
+        WEIGHTED_ORES.put(MAX_ORE_KEY, Material.IRON_ORE);
+        MAX_ORE_KEY += 10;
+        WEIGHTED_ORES.put(MAX_ORE_KEY, Material.LAPIS_ORE);
+        MAX_ORE_KEY += 10;
+        WEIGHTED_ORES.put(MAX_ORE_KEY, Material.REDSTONE_ORE);
+        MAX_ORE_KEY += 5;
+        WEIGHTED_ORES.put(MAX_ORE_KEY, Material.GOLD_ORE);
+        MAX_ORE_KEY += 5;
+        WEIGHTED_ORES.put(MAX_ORE_KEY, Material.EMERALD_ORE);
+        MAX_ORE_KEY += 2;
+        WEIGHTED_ORES.put(MAX_ORE_KEY, Material.DIAMOND_ORE);
+
+    }
     @Override
     public void populate(World world, Random random, Chunk chunk) {
         Biome biome = chunk.getBlock(0,0,0).getBiome();
         switch (biome) {
             case HELL:
+                // Start some fires
                 for (int x = 0; x < 16; x++) {
                     for (int z = 0; z < 16; z++) {
                         if (random.nextBoolean()) {
@@ -20,7 +43,27 @@ public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
                         }
                     }
                 }
+                // Add some ore
+                if (random.nextBoolean()) {
+                    generateOre(chunk, Material.QUARTZ_ORE);
+                } else {
+                    generateOre(chunk, Material.GLOWSTONE);
+                }
                 break;
+            case BEACH:
+                // Fill the center with water.
+                for (int y = 17; y < 22; y++) {
+                    for (int x = 7; x < 9; x++) {
+                        for (int z = 7; z < 9; z++) {
+                            world.getBlockAt(chunk.getX() * 16 + x, y, chunk.getZ() * 16 + z).setType(Material.STATIONARY_WATER);
+                        }
+                    }
+                }
+                // Remove the top so that the water is visible.
+                world.getBlockAt(chunk.getX() * 16 + 7, 22, chunk.getZ() * 16 + 7).setType(Material.AIR);
+                world.getBlockAt(chunk.getX() * 16 + 8, 22, chunk.getZ() * 16 + 7).setType(Material.AIR);
+                world.getBlockAt(chunk.getX() * 16 + 8, 22, chunk.getZ() * 16 + 8).setType(Material.AIR);
+                world.getBlockAt(chunk.getX() * 16 + 7, 22, chunk.getZ() * 16 + 8).setType(Material.AIR);
             case JUNGLE:
             case JUNGLE_EDGE:
             case JUNGLE_EDGE_MOUNTAINS:
@@ -39,10 +82,30 @@ public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
                 generateTree(chunk, TreeType.BIRCH);
                 break;
             default:
-
+                if (random.nextInt(10) == 1) {
+                    generateChest(chunk, random);
+                } else {
+                    generateRandomOre(chunk, random);
+                }
         }
     }
 
+
+    public void generateRandomOre(Chunk chunk, Random random) {
+        Material material = WEIGHTED_ORES.ceilingEntry(random.nextInt(MAX_ORE_KEY)).getValue();
+        generateOre(chunk, material);
+    }
+    public void generateOre(Chunk chunk, Material ore) {
+        int y = 17;
+        for (int x = 7; x < 9; x++) {
+            for (int z = 7; z < 9; z++) {
+                chunk.getBlock(x, y, z).setType(ore);
+            }
+        }
+    }
+    public void generateChest(Chunk chunk, Random random) {
+
+    }
     public static void generateTree(Chunk chunk, TreeType type) {
         chunk.getWorld().generateTree(new Location(chunk.getWorld(), chunk.getX() * 16 + 7, 23, chunk.getZ() * 16 + 7), type);
     }
