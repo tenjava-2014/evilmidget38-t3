@@ -22,6 +22,7 @@ public class MySuperCoolChunkGenerator extends ChunkGenerator {
         this.world = world;
         this.id = id;
     }
+    @SuppressWarnings("deprecation")
     @Override
     public byte[][] generateBlockSections(World world, Random random, int x, int z, BiomeGrid biomes) {
         if (firstchunk) {
@@ -30,6 +31,10 @@ public class MySuperCoolChunkGenerator extends ChunkGenerator {
             spawnZ = z;
         }
         ChunkBuilder chunkBuilder = new ChunkBuilder(world, random, biomes);
+        // Get a random biome
+        Biome biome = BIOMES[random.nextInt(BIOMES.length)];
+        chunkBuilder.setBiome(biome);
+        byte pyramidMaterial = getMaterial(biome);
         // 16x16x1 bedrock layer
         chunkBuilder.set(0, 0, 0, 16, 1, 16, (byte) Material.BEDROCK.getId());
         // 16x16x16 stone base.
@@ -43,12 +48,21 @@ public class MySuperCoolChunkGenerator extends ChunkGenerator {
         for (int y = 16; y < 23; y++) {
             // half_of_chunk_width - (pyramid_max_height - y)
             int xAndZ = 8 - (23 - y);
-            chunkBuilder.set(xAndZ, y, xAndZ, 16 - xAndZ, y + 1, 16 - xAndZ, (byte) Material.GRASS.getId());
+            chunkBuilder.set(xAndZ, y, xAndZ, 16 - xAndZ, y + 1, 16 - xAndZ, pyramidMaterial);
         }
-        chunkBuilder.setBiome(BIOMES[random.nextInt(BIOMES.length)]);
         return chunkBuilder.build();
     }
 
+    public byte getMaterial(Biome biome) {
+        switch (biome) {
+            case HELL:
+                return (byte) Material.NETHERRACK.getId();
+            case BEACH:
+                return (byte) Material.SAND.getId();
+            default:
+                return (byte) Material.GRASS.getId();
+        }
+    }
     @Override
     public List<BlockPopulator> getDefaultPopulators(World world) {
         return ImmutableList.<BlockPopulator>of(new MySuperCoolBlockPopulatorThatDoesThings());
