@@ -40,7 +40,7 @@ public class MySuperCoolChunkGenerator extends ChunkGenerator {
     }
 
     public GenerationDelegate getDelegate(Random random) {
-        if (random.nextInt(200) == 1) {
+        if (random.nextInt(20) == 1) {
             return new FloatingDiamondDelegate();
         } else {
             Biome randomBiome = BIOMES[random.nextInt(BIOMES.length)];
