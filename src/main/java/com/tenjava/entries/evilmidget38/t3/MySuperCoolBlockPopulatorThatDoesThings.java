@@ -39,7 +39,7 @@ public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
                 for (int x = 0; x < 16; x++) {
                     for (int z = 0; z < 16; z++) {
                         if (random.nextBoolean()) {
-                            world.getHighestBlockAt(chunk.getX() * 16 + x, chunk.getZ() * 16 + z).getRelative(BlockFace.UP).setType(Material.FIRE);
+                            world.getHighestBlockAt(chunk.getX() * 16 + x, chunk.getZ() * 16 + z).setType(Material.FIRE);
                         }
                     }
                 }
@@ -69,7 +69,7 @@ public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
                 // Add some snow
                 for (int x = 0; x < 16; x++) {
                     for (int z = 0; z < 16; z++) {
-                        world.getHighestBlockAt(chunk.getX() * 16 + x, chunk.getZ() * 16 + z).getRelative(BlockFace.UP).setType(Material.SNOW);
+                        world.getHighestBlockAt(chunk.getX() * 16 + x, chunk.getZ() * 16 + z).setType(Material.SNOW);
                     }
                 }
                 break;
