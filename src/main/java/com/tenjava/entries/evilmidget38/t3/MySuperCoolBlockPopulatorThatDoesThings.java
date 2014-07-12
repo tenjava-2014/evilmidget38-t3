@@ -44,6 +44,6 @@ public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
     }
 
     public static void generateTree(Chunk chunk, TreeType type) {
-        chunk.getWorld().generateTree(new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 23, chunk.getZ() * 16 + 8), type);
+        chunk.getWorld().generateTree(new Location(chunk.getWorld(), chunk.getX() * 16 + 7, 23, chunk.getZ() * 16 + 7), type);
     }
 }
