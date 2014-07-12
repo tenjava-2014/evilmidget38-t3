@@ -36,8 +36,8 @@ public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
         switch (biome) {
             case HELL:
                 // Start some fires
-                for (int x = 0; x < 16; x++) {
-                    for (int z = 0; z < 16; z++) {
+                for (int x = 1; x < 15; x++) {
+                    for (int z = 1; z < 15; z++) {
                         if (random.nextBoolean()) {
                             world.getHighestBlockAt(chunk.getX() * 16 + x, chunk.getZ() * 16 + z).setType(Material.FIRE);
                         }
@@ -67,8 +67,8 @@ public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
                 break;
             case ICE_PLAINS:
                 // Add some snow
-                for (int x = 0; x < 16; x++) {
-                    for (int z = 0; z < 16; z++) {
+                for (int x = 1; x < 15; x++) {
+                    for (int z = 1; z < 15; z++) {
                         world.getHighestBlockAt(chunk.getX() * 16 + x, chunk.getZ() * 16 + z).setType(Material.SNOW);
                     }
                 }
