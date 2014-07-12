@@ -8,10 +8,13 @@ import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class MySuperCoolChunkGenerator extends ChunkGenerator {
+    private final Map<ChunkCoord, GenerationDelegate> structures = new HashMap<ChunkCoord, GenerationDelegate>();
     private final Biome[] BIOMES = Biome.values();
     private final String world;
     private final String id;
@@ -31,42 +34,34 @@ public class MySuperCoolChunkGenerator extends ChunkGenerator {
             spawnZ = z;
         }
         ChunkBuilder chunkBuilder = new ChunkBuilder(world, random, biomes);
-        // Get a random biome
-        Biome biome = BIOMES[random.nextInt(BIOMES.length)];
-        chunkBuilder.setBiome(biome);
-        byte pyramidMaterial = getMaterial(biome);
-        // 16x16x1 bedrock layer
-        chunkBuilder.set(0, 0, 0, 16, 1, 16, (byte) Material.BEDROCK.getId());
-        // 16x16x16 stone base.
-        chunkBuilder.set(0,1,0,16,16,16, (byte) Material.STONE.getId());
-        // stationary lava border, implemented as 4 rectangles.
-        chunkBuilder.set(0,16, 0, 1, 17, 16, (byte) Material.STATIONARY_LAVA.getId());
-        chunkBuilder.set(0,16, 0, 16, 17, 1, (byte) Material.STATIONARY_LAVA.getId());
-        chunkBuilder.set(15, 16, 0, 16, 17, 16, (byte) Material.STATIONARY_LAVA.getId());
-        chunkBuilder.set(0, 16, 15, 16, 17, 16, (byte) Material.STATIONARY_LAVA.getId());
-        // Construct a pyramid composed of 7 layers
-        for (int y = 16; y < 23; y++) {
-            // half_of_chunk_width - (pyramid_max_height - y)
-            int xAndZ = 8 - (23 - y);
-            chunkBuilder.set(xAndZ, y, xAndZ, 16 - xAndZ, y + 1, 16 - xAndZ, pyramidMaterial);
-        }
+        GenerationDelegate delegate = getDelegate(random);
+        delegate.generate(chunkBuilder, x, z);
         return chunkBuilder.build();
     }
 
-    public byte getMaterial(Biome biome) {
-        switch (biome) {
-            case HELL:
-                return (byte) Material.NETHERRACK.getId();
-            case BEACH:
-                return (byte) Material.SAND.getId();
-            case ICE_MOUNTAINS:
-                return (byte) Material.SNOW_BLOCK.getId();
-            case DEEP_OCEAN:
-                return (byte) Material.STATIONARY_WATER.getId();
-            default:
-                return (byte) Material.GRASS.getId();
+    public GenerationDelegate getDelegate(Random random) {
+        if (random.nextInt(200) == 1) {
+            return new FloatingDiamondDelegate();
+        } else {
+            Biome randomBiome = BIOMES[random.nextInt(BIOMES.length)];
+            return new PyramidGenerationDelegate(randomBiome, getMaterial(randomBiome));
         }
     }
+    public Material getMaterial(Biome biome) {
+        switch (biome) {
+            case HELL:
+                return Material.NETHERRACK;
+            case BEACH:
+                return Material.SAND;
+            case ICE_MOUNTAINS:
+                return Material.SNOW_BLOCK;
+            case DEEP_OCEAN:
+                return Material.STATIONARY_WATER;
+            default:
+                return Material.GRASS;
+        }
+    }
+
     @Override
     public List<BlockPopulator> getDefaultPopulators(World world) {
         return ImmutableList.<BlockPopulator>of(new MySuperCoolBlockPopulatorThatDoesThings());

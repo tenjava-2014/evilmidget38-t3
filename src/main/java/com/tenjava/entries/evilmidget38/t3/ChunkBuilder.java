@@ -55,6 +55,10 @@ public class ChunkBuilder {
         }
     }
 
+    public Random getRandom() {
+        return random;
+    }
+
     public void setBiome(int x, int z, Biome biome) {
         this.grid.setBiome(x, z, biome);
     }
