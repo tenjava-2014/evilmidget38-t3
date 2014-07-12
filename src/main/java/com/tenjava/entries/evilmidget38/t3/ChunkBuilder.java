@@ -1,11 +1,11 @@
 package com.tenjava.entries.evilmidget38.t3;
 
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 
 import java.util.Random;
 
+// Yes, I wrote this.
 public class ChunkBuilder {
     private final World world;
     private final Random random;
@@ -18,6 +18,8 @@ public class ChunkBuilder {
         this.chunk = new byte[world.getMaxHeight() / 16][];
     }
 
+    // This is a slightly modified version of the method found in the javadocs for ChunkGenerator.
+    // jkcclemens said I could have it.
     public void setBlock(int x, int y, int z, byte blkid) {
         if (chunk[y >> 4] == null) {
             chunk[y >> 4] = new byte[4096];
@@ -25,7 +27,9 @@ public class ChunkBuilder {
         chunk[y >> 4][((y & 0xF) << 8) | (z << 4) | x] = blkid;
     }
 
-    byte getBlock(int x, int y, int z) {
+    // This is a slightly modified version of the method found in the javadocs for ChunkGenerator.
+    // jkcclemens said I could have it.
+    public byte getBlock(int x, int y, int z) {
         if (chunk[y >> 4] == null) {
             return (byte)0;
         }
