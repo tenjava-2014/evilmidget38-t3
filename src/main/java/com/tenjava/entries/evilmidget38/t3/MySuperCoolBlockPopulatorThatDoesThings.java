@@ -64,6 +64,15 @@ public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
                 world.getBlockAt(chunk.getX() * 16 + 8, 22, chunk.getZ() * 16 + 7).setType(Material.AIR);
                 world.getBlockAt(chunk.getX() * 16 + 8, 22, chunk.getZ() * 16 + 8).setType(Material.AIR);
                 world.getBlockAt(chunk.getX() * 16 + 7, 22, chunk.getZ() * 16 + 8).setType(Material.AIR);
+                break;
+            case ICE_PLAINS:
+                // Add some snow
+                for (int x = 0; x < 16; x++) {
+                    for (int z = 0; z < 16; z++) {
+                        world.getHighestBlockAt(chunk.getX() * 16 + x, chunk.getZ() * 16 + z).getRelative(BlockFace.UP).setType(Material.SNOW);
+                    }
+                }
+                break;
             case JUNGLE:
             case JUNGLE_EDGE:
             case JUNGLE_EDGE_MOUNTAINS:
@@ -95,6 +104,7 @@ public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
         Material material = WEIGHTED_ORES.ceilingEntry(random.nextInt(MAX_ORE_KEY)).getValue();
         generateOre(chunk, material);
     }
+
     public void generateOre(Chunk chunk, Material ore) {
         int y = 17;
         for (int x = 7; x < 9; x++) {
@@ -103,9 +113,11 @@ public class MySuperCoolBlockPopulatorThatDoesThings extends BlockPopulator {
             }
         }
     }
+
     public void generateChest(Chunk chunk, Random random) {
 
     }
+
     public static void generateTree(Chunk chunk, TreeType type) {
         chunk.getWorld().generateTree(new Location(chunk.getWorld(), chunk.getX() * 16 + 7, 23, chunk.getZ() * 16 + 7), type);
     }

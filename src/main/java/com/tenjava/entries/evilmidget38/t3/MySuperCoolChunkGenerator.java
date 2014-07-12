@@ -59,6 +59,10 @@ public class MySuperCoolChunkGenerator extends ChunkGenerator {
                 return (byte) Material.NETHERRACK.getId();
             case BEACH:
                 return (byte) Material.SAND.getId();
+            case ICE_MOUNTAINS:
+                return (byte) Material.SNOW_BLOCK.getId();
+            case DEEP_OCEAN:
+                return (byte) Material.STATIONARY_WATER.getId();
             default:
                 return (byte) Material.GRASS.getId();
         }
